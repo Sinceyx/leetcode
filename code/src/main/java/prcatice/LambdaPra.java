@@ -22,41 +22,63 @@ public class LambdaPra {
                 new Transaction(alan, 2012, 950)
         );
         // 找出2011年发生的所有交易，并按交易额排序
-        List<Transaction> trans2011 = transactions.stream().filter(t -> t.getYear() == 2011).sorted(Comparator.comparingInt(t->t.getMoney())).collect(Collectors.toList());
+        List<Transaction> trans2011 = transactions.stream()
+                .filter(t -> t.getYear() == 2011)
+                .sorted(Comparator.comparingInt(t -> t.getMoney()))
+                .collect(Collectors.toList());
         System.out.println(trans2011);
 
         // 交易员在哪些不同的城市工作过
-        List<String> locations = transactions.stream().map(t->t.getName().getLocation()).distinct().collect(Collectors.toList());
+        List<String> locations = transactions.stream()
+                .map(t -> t.getName().getLocation())
+                .distinct()
+                .collect(Collectors.toList());
         System.out.println(locations);
 
         // 查找所有来自剑桥的交易员，并按姓名排序
-        List<Trader> traders = transactions.stream().map(t->t.getName()).filter(t->t.getLocation().equals("Cambridge")).distinct().sorted(Comparator.comparing(Trader::getName)).collect(Collectors.toList());
+        List<Trader> traders = transactions.stream()
+                .map(t -> t.getName())
+                .filter(t -> t.getLocation().equals("Cambridge"))
+                .distinct()
+                .sorted(Comparator.comparing(Trader::getName))
+                .collect(Collectors.toList());
         System.out.println(traders);
 
         // 返回所有交易员的姓名字符串，并按字母顺序排序
-        String names = transactions.stream().map(t->t.getName().getName()).distinct().sorted().reduce("",(s1,s2)->s1+s2);
+        String names = transactions.stream()
+                .map(t -> t.getName().getName())
+                .distinct().sorted()
+                .reduce("", (s1, s2) -> s1 + s2);
         System.out.println(names);
 
         // 有没有交易员在米兰工作的？
         //　　　　 // .anyMatch表示一组数据中,是否包含一条或多条该数据
-        boolean anyMatch = transactions.stream().anyMatch(t->t.getName().getLocation().equals("Milan"));
+        boolean anyMatch = transactions.stream()
+                .anyMatch(t -> t.getName().getLocation().equals("Milan"));
         System.out.println(anyMatch);
 
         // 打印生活在剑桥的交易员的所有交易额
-        Map<String,Integer> nameAndTotalMoney = transactions.stream().filter(t->t.getName().getLocation().equals("Cambridge")).collect(Collectors.groupingBy(t->t.getName().getName(),Collectors.summingInt(Transaction::getMoney)));
+        Map<String, Integer> nameAndTotalMoney = transactions.stream()
+                .filter(t -> t.getName().getLocation().equals("Cambridge"))
+                .collect(Collectors.groupingBy(t -> t.getName().getName(), Collectors.summingInt(Transaction::getMoney)));
         System.out.println(nameAndTotalMoney);
 
         // 所有交易中，最高的交易额是多少
-        int maxMoney = transactions.stream().map(Transaction::getMoney).reduce(0,Integer::max);
+        int maxMoney = transactions.stream()
+                .map(Transaction::getMoney)
+                .reduce(0, Integer::max);
         System.out.println(maxMoney);
 
         // 找到交易额最小的交易
-        Transaction minTrans = transactions.stream().min(Comparator.comparing(Transaction::getMoney)).get();
+        Transaction minTrans = transactions.stream()
+                .min(Comparator.comparing(Transaction::getMoney))
+                .get();
         System.out.println(minTrans);
 
     }
 }
-class Trader{
+
+class Trader {
     String name;
     String location;
 
@@ -93,7 +115,8 @@ class Trader{
     }
 
 }
-class Transaction{
+
+class Transaction {
     Trader name;
     int year;
     int money;
